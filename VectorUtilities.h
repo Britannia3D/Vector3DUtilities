@@ -111,13 +111,15 @@ public:
 	//There are infinite such vectors, return one such.
 	Vector3D arbitraryOrthogonal(Vector3D vec);
 
-	//Use spherical coordinates to get a position
-	Vector3D OrbitalPosition(float angle1, float angle2, Vector3D centroid);
+	//Use spherical coordinates to compute a position vector
+	Vector3D OrbitalPosition(float angle1, float angle2, Vector3D centroid, float radius);
 
 	//Set the length (magnitude) of a given vector
 	Vector3D setVectorMagitude(Vector3D input, float newMag);
-
+	
+	//Get vector magnitude
 	double length(Vector3D vec);
 
+	//Normalize a vector
 	Vector3D normalize(Vector3D vec);
 };

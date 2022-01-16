@@ -60,8 +60,8 @@ Vector3D Vector3DUtils::arbitraryOrthogonal(Vector3D vec)
 	return op;
 }
 
-//Use spherical coordinates to get a position
-Vector3D Vector3DUtils::OrbitalPosition(float angle1, float angle2, Vector3D centroid)
+//Use spherical coordinates to compute a position vector
+Vector3D Vector3DUtils::OrbitalPosition(float angle1, float angle2, Vector3D centroid, float radius)
 {
 	float sx = centroid.x;// -0.013;
 	float sy = centroid.y;// 1.06;
@@ -69,7 +69,6 @@ Vector3D Vector3DUtils::OrbitalPosition(float angle1, float angle2, Vector3D cen
 
 	float Theta = angle1;
 	float Phi = angle2;
-	float radius = 0.3;
 	float Y = radius * sin(Theta);
 	float X = radius * cos(Theta) * cos(Phi);
 	float Z = radius * cos(Theta) * sin(Phi);
@@ -91,11 +90,13 @@ Vector3D Vector3DUtils::setVectorMagitude(Vector3D input, float newMag)
 	return op;
 }
 
+//Get vector magnitude
 double Vector3DUtils::length(Vector3D vec)
 {
 	return sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2));
 }
 
+//Normalize a vector
 Vector3D Vector3DUtils::normalize(Vector3D vec)
 {
 	float op1 = pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2);
