@@ -1,3 +1,12 @@
+/*
+ * Author: David McHale, <mchale.d@yahoo.com>
+ *
+ * (C) Copyright 2022
+ *
+ * MIT License
+ *
+*/
+
 #pragma once
 
 //Self-contained 3D vector class. Additional utility functions in ::Vector3DUtils

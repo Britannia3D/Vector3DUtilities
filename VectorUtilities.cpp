@@ -1,3 +1,12 @@
+/*
+ * Author: David McHale, <mchale.d@yahoo.com>
+ *
+ * (C) Copyright 2022
+ *
+ * MIT License
+ *
+*/
+
 #include <iostream>
 #include <sstream>
 
