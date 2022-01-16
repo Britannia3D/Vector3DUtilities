@@ -32,6 +32,11 @@ int main()
 	theVector.x += 5;//Add 5 to x
 
 	cout << theVector << endl;
+
+	//Dot product of two vectors
+	Vector3D newVector(1, 2, 3);
+	cout << vecUtils.dot(theVector, newVector) << endl;
+
 	system("PAUSE");
 
 	return 1;

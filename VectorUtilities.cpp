@@ -22,9 +22,9 @@ Vector3D Vector3DUtils::cross(const Vector3D& A, const Vector3D& B)
 	return crossP;
 }
 
-double Vector3DUtils::dot(Vector3D input1, const Vector3D& rhs)
+double Vector3DUtils::dot(Vector3D input1, const Vector3D& input2)
 {
-	return input1.x * rhs.x + input1.y * rhs.y + input1.z * rhs.z;
+	return input1.x * input2.x + input1.y * input2.y + input1.z * input2.z;
 }
 
 Vector3D Vector3DUtils::intersectPoint(Vector3D rayVector, Vector3D rayPoint, Vector3D planeNormal, Vector3D planePoint)
@@ -33,12 +33,13 @@ Vector3D Vector3DUtils::intersectPoint(Vector3D rayVector, Vector3D rayPoint, Ve
 	double prod1 = dot(diff, planeNormal);
 	double prod2 = dot(rayVector, planeNormal);
 	double prod3 = prod1 / prod2;
+	
 	return rayPoint - rayVector * prod3;
 }
 
 //Get arbitrary 3d vector that is perpendicular to the parameter vector
-//There are infinite such vectors, return one such
-Vector3D Vector3DUtils::arbitrary_orthogonal(Vector3D vec)
+//There are infinite such vectors, get one such
+Vector3D Vector3DUtils::arbitraryOrthogonal(Vector3D vec)
 {
 	bool b0 = (vec.x < vec.y) && (vec.x < vec.z);
 	bool b1 = (vec.y <= vec.x) && (vec.y < vec.z);
@@ -77,6 +78,7 @@ Vector3D Vector3DUtils::setVectorMagitude(Vector3D input, float newMag)
 	float new_z = input.z * newMag / mag;
 
 	Vector3D op(new_x, new_y, new_z);
+	
 	return op;
 }
 

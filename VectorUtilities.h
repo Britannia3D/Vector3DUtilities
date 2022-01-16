@@ -22,66 +22,63 @@ public:
 	}
 
 	//Mathematics operations
-	Vector3D operator-(const Vector3D& rhs) const
+	Vector3D operator-(const Vector3D& inputVector) const
 	{
-		return Vector3D(x - rhs.x, y - rhs.y, z - rhs.z);
+		return Vector3D(x - inputVector.x, y - inputVector.y, z - inputVector.z);
 	}
 
-	Vector3D operator-(double rhs) const
+	Vector3D operator-(double f) const
 	{
-		return Vector3D(rhs - x, rhs - y, rhs - z);
+		return Vector3D(f - x, f - y, f - z);
 	}
 
-	Vector3D operator+(double rhs) const
+	Vector3D operator+(double f) const
 	{
-		return Vector3D(rhs + x, rhs + y, rhs + z);
+		return Vector3D(f + x, f + y, f + z);
 	}
 
-	Vector3D operator+(const Vector3D& rhs) const
+	Vector3D operator+(const Vector3D& inputVector) const
 	{
-		return Vector3D(x + rhs.x, y + rhs.y, z + rhs.z);
+		return Vector3D(x + inputVector.x, y + inputVector.y, z + inputVector.z);
 	}
 
-	Vector3D operator*(double rhs) const
+	Vector3D operator*(double f) const
 	{
-		return Vector3D(rhs*x, rhs*y, rhs*z);
+		return Vector3D(f*x, f*y, f*z);
 	}
 
-	Vector3D operator/(double rhs) const
+	Vector3D operator/(double f) const
 	{
-		return Vector3D(rhs / x, rhs / y, rhs / z);
+		return Vector3D(f / x, f / y, f / z);
 	}
 
-	void operator+=(const Vector3D& rhs)
+	void operator+=(const Vector3D& inputVector)
 	{
-		//return Vector3D(rhs.x + x, rhs.y + y, rhs.z + z);
-
-		this->x = rhs.x + this->x;
-		this->y = rhs.y + this->y;
-		this->z = rhs.z + this->z;
+		this->x = inputVector.x + this->x;
+		this->y = inputVector.y + this->y;
+		this->z = inputVector.z + this->z;
 	}
 
-	void operator*=(double rhs)
+	void operator*=(double f)
 	{
-		this->x = rhs * this->x;
-		this->y = rhs * this->y;
-		this->z = rhs * this->z;
+		this->x = f * this->x;
+		this->y = f * this->y;
+		this->z = f * this->z;
 	}
 
-	void operator/=(double rhs)
+	void operator/=(double f)
 	{
-		this->x = rhs / this->x;
-		this->y = rhs / this->y;
-		this->z = rhs / this->z;
+		this->x = f / this->x;
+		this->y = f / this->y;
+		this->z = f / this->z;
 	}
 
-	void operator-=(const Vector3D& rhs)
+	void operator-=(const Vector3D& inputVector)
 	{
-		this->x -= rhs.x + this->x;
-		this->y -= rhs.y + this->y;
-		this->z -= rhs.z + this->z;
+		this->x -= inputVector.x + this->x;
+		this->y -= inputVector.y + this->y;
+		this->z -= inputVector.z + this->z;
 	}
-
 };
 
 
@@ -92,16 +89,18 @@ public:
 	//Euclidean distance
 	float dist(float x1, float y1, float z1, float x2, float y2, float z2);
 
-	//Cross product of two vector array.
+	//Cross product of two Vector3D's.
 	Vector3D cross(const Vector3D& A, const Vector3D& B);
 
-	double dot(Vector3D input1, const Vector3D& rhs);
+	//Dot product
+	double dot(Vector3D input1, const Vector3D& input2);
 
+	//Vector plane intersect
 	Vector3D intersectPoint(Vector3D rayVector, Vector3D rayPoint, Vector3D planeNormal, Vector3D planePoint);
 
 	//Get arbitrary 3d vector that is perpendicular to the parameter vector	
 	//There are infinite such vectors, return one such.
-	Vector3D arbitrary_orthogonal(Vector3D vec);
+	Vector3D arbitraryOrthogonal(Vector3D vec);
 
 	//Use spherical coordinates to get a position
 	Vector3D OrbitalPosition(float angle1, float angle2, Vector3D centroid);
