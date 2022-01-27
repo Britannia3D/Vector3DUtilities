@@ -151,7 +151,7 @@ public:
 	Vector3D arbitraryOrthogonal(Vector3D vec);
 
 	//Use spherical coordinates to get a position
-	Vector3D OrbitalPosition(float angle1, float angle2, Vector3D centroid);
+	Vector3D OrbitalPosition(float angle1, float angle2, Vector3D centre);
 
 	//Set the length (magnitude) of a given vector
 	Vector3D setVectorMagitude(Vector3D input, float newMag);
@@ -163,7 +163,7 @@ public:
 	Vector3D lerp(Vector3D a, Vector3D b, float scale);
 
 	//Move vector towards another vector by a set amount
-	Vector3D displaceVectorTowards(Vector3D a, Vector3D b, float ammount);
+	Vector3D displaceVectorTowards(Vector3D a, Vector3D b, float amount);
 
 	Vector3D normalize(Vector3D vec);
 };

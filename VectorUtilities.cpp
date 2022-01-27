@@ -63,7 +63,7 @@ Vector3D Vector3DUtils::arbitraryOrthogonal(Vector3D vec)
 }
 
 //Use spherical coordinates to get a position
-Vector3D Vector3DUtils::OrbitalPosition(float angle1, float angle2, Vector3D centroid)
+Vector3D Vector3DUtils::OrbitalPosition(float angle1, float angle2, Vector3D centre, float radius)
 {
 	float sx = centroid.x;// -0.013;
 	float sy = centroid.y;// 1.06;
@@ -71,7 +71,6 @@ Vector3D Vector3DUtils::OrbitalPosition(float angle1, float angle2, Vector3D cen
 
 	float Theta = angle1;
 	float Phi = angle2;
-	float radius = 0.3;
 	float Y = radius * sin(Theta);
 	float X = radius * cos(Theta) * cos(Phi);
 	float Z = radius * cos(Theta) * sin(Phi);
@@ -113,7 +112,7 @@ Vector3D Vector3DUtils::lerp(Vector3D a, Vector3D b, float scale)
 }
 
 
-Vector3D Vector3DUtils::displaceVectorTowards(Vector3D a, Vector3D b, float ammount)
+Vector3D Vector3DUtils::displaceVectorTowards(Vector3D a, Vector3D b, float amount)
 {
 	Vector3D op0(0, 0, 0);
 
@@ -128,7 +127,7 @@ Vector3D Vector3DUtils::displaceVectorTowards(Vector3D a, Vector3D b, float ammo
 	float vLen1 = 1 / vLen0;//Amount to scale to increase by 1
 
 	Vector3D op3(op1.x, op1.y, op1.z);
-	op3 *= vLen1 * ammount;
+	op3 *= vLen1 * amount;
 
 	Vector3D op2(0, 0, 0);
 	op2.x = a.x + op3.x;
@@ -154,4 +153,4 @@ Vector3D Vector3DUtils::normalize(Vector3D vec)
 	op.z = vec.z / op1;
 
 	return op;
-}
+} 
