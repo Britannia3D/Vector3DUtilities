@@ -113,7 +113,7 @@ Vector3D Vector3DUtils::lerp(Vector3D a, Vector3D b, float scale)
 }
 
 
-Vector3D Vector3DUtils::displaceVectorTowards(Vector3D a, Vector3D b, float scale)
+Vector3D Vector3DUtils::displaceVectorTowards(Vector3D a, Vector3D b, float ammount)
 {
 	Vector3D op0(0, 0, 0);
 
@@ -128,7 +128,7 @@ Vector3D Vector3DUtils::displaceVectorTowards(Vector3D a, Vector3D b, float scal
 	float vLen1 = 1 / vLen0;//Amount to scale to increase by 1
 
 	Vector3D op3(op1.x, op1.y, op1.z);
-	op3 *= vLen1 * scale;
+	op3 *= vLen1 * ammount;
 
 	Vector3D op2(0, 0, 0);
 	op2.x = a.x + op3.x;

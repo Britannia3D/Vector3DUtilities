@@ -163,7 +163,7 @@ public:
 	Vector3D lerp(Vector3D a, Vector3D b, float scale);
 
 	//Move vector towards another vector by a set amount
-	Vector3D displaceVectorTowards(Vector3D a, Vector3D b, float scale);
+	Vector3D displaceVectorTowards(Vector3D a, Vector3D b, float ammount);
 
 	Vector3D normalize(Vector3D vec);
 };
