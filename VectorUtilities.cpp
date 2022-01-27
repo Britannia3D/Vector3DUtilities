@@ -5,7 +5,10 @@
  *
  * MIT License
  *
+ * All algorithms untested, use at your own risk!
+ *
 */
+
 
 #include <iostream>
 #include <sstream>
@@ -42,7 +45,6 @@ Vector3D Vector3DUtils::intersectPoint(Vector3D rayVector, Vector3D rayPoint, Ve
 	double prod1 = dot(diff, planeNormal);
 	double prod2 = dot(rayVector, planeNormal);
 	double prod3 = prod1 / prod2;
-	
 	return rayPoint - rayVector * prod3;
 }
 
@@ -60,8 +62,8 @@ Vector3D Vector3DUtils::arbitraryOrthogonal(Vector3D vec)
 	return op;
 }
 
-//Use spherical coordinates to compute a position vector
-Vector3D Vector3DUtils::OrbitalPosition(float angle1, float angle2, Vector3D centroid, float radius)
+//Use spherical coordinates to get a position
+Vector3D Vector3DUtils::OrbitalPosition(float angle1, float angle2, Vector3D centroid)
 {
 	float sx = centroid.x;// -0.013;
 	float sy = centroid.y;// 1.06;
@@ -69,6 +71,7 @@ Vector3D Vector3DUtils::OrbitalPosition(float angle1, float angle2, Vector3D cen
 
 	float Theta = angle1;
 	float Phi = angle2;
+	float radius = 0.3;
 	float Y = radius * sin(Theta);
 	float X = radius * cos(Theta) * cos(Phi);
 	float Z = radius * cos(Theta) * sin(Phi);
@@ -86,17 +89,60 @@ Vector3D Vector3DUtils::setVectorMagitude(Vector3D input, float newMag)
 	float new_z = input.z * newMag / mag;
 
 	Vector3D op(new_x, new_y, new_z);
-	
 	return op;
 }
 
-//Get vector magnitude
+
+Vector3D Vector3DUtils::lerp(Vector3D a, Vector3D b, float scale)
+{
+	Vector3D op0(0, 0, 0);
+
+	//[End-Start]
+	op0.x = b.x - a.x;
+	op0.y = b.y - a.y;
+	op0.z = b.z - a.z;
+	//[Multiply by scale]
+	op0 *= scale;
+
+	Vector3D op1(0, 0, 0);
+	op1.x = a.x + op0.x;
+	op1.y = a.y + op0.y;
+	op1.z = a.z + op0.z;
+
+	return(op1);
+}
+
+
+Vector3D Vector3DUtils::displaceVectorTowards(Vector3D a, Vector3D b, float scale)
+{
+	Vector3D op0(0, 0, 0);
+
+	//[End-Start]
+	op0.x = b.x - a.x;
+	op0.y = b.y - a.y;
+	op0.z = b.z - a.z;
+	
+	Vector3D op1(op0.x, op0.y, op0.z);
+	Vector3D vi(op1.x, op1.y, op1.z);
+	float vLen0 = length(vi);
+	float vLen1 = 1 / vLen0;//Amount to scale to increase by 1
+
+	Vector3D op3(op1.x, op1.y, op1.z);
+	op3 *= vLen1 * scale;
+
+	Vector3D op2(0, 0, 0);
+	op2.x = a.x + op3.x;
+	op2.y = a.y + op3.y;
+	op2.z = a.z + op3.z;
+
+	return(op2);
+}
+
 double Vector3DUtils::length(Vector3D vec)
 {
 	return sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2));
 }
 
-//Normalize a vector
 Vector3D Vector3DUtils::normalize(Vector3D vec)
 {
 	float op1 = pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2);

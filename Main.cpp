@@ -17,6 +17,14 @@ Vector3DUtils vecUtils;
 
 int main()
 {
+	Vector3D vector1(1, 1, 0);
+	Vector3D vector2(5, 1, 0);
+
+	Vector3D vector3 = vecUtils.displaceVectorTowards(vector1, vector2, 7);
+
+	cout << vector3 << endl;
+
+	/*
 	Vector3D theVector(0, 0, 0);//Instantiate the vector class
 
 	//Set values directly
@@ -38,6 +46,7 @@ int main()
 	cout << vecUtils.dot(theVector, newVector) << endl;
 
 	system("PAUSE");
+	*/
 
 	return 1;
 }
