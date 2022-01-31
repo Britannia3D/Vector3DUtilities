@@ -9,7 +9,6 @@
  *
 */
 
-
 #include <iostream>
 #include <sstream>
 
@@ -65,17 +64,13 @@ Vector3D Vector3DUtils::arbitraryOrthogonal(Vector3D vec)
 //Use spherical coordinates to get a position
 Vector3D Vector3DUtils::OrbitalPosition(float angle1, float angle2, Vector3D centre, float radius)
 {
-	float sx = centroid.x;// -0.013;
-	float sy = centroid.y;// 1.06;
-	float sz = centroid.z;// 1.06;
-
 	float Theta = angle1;
 	float Phi = angle2;
 	float Y = radius * sin(Theta);
 	float X = radius * cos(Theta) * cos(Phi);
 	float Z = radius * cos(Theta) * sin(Phi);
 
-	return Vector3D(X + sx, Y + sy, Z + sz);
+	return Vector3D(X + centre.x, Y + centre.y, Z + centre.z;);
 }
 
 //Set the length (magnitude) of a given vector

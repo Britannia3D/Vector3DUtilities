@@ -1,5 +1,3 @@
-#pragma once
-
 /*
  * Author: David McHale, <mchale.d@yahoo.com>
  *
@@ -10,6 +8,8 @@
  * All algorithms untested, use at your own risk!
  *
 */
+
+#pragma once
 
 //Self-contained 3D vector class. Additional utility functions in ::Vector3DUtils
 class Vector3D
@@ -164,6 +164,7 @@ public:
 
 	//Move vector towards another vector by a set amount
 	Vector3D displaceVectorTowards(Vector3D a, Vector3D b, float amount);
-
+	
+	//Normalize a vector
 	Vector3D normalize(Vector3D vec);
 };
