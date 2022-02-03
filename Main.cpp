@@ -17,36 +17,19 @@ Vector3DUtils vecUtils;
 
 int main()
 {
-	Vector3D vector1(1, 1, 0);
-	Vector3D vector2(5, 1, 0);
+	Vector3D vertex1(0.810067, 2.05786, 1.10034);
+	Vector3D vertex2(0.140595, 2.06562, 1.10034);
+	Vector3D vertex3(0.159295, 2.72633, 1.10034);
 
-	Vector3D vector3 = vecUtils.displaceVectorTowards(vector1, vector2, 7);
+	Vector3D point(0.455545, 2.34121, 1.49899);
+	Vector3D lineEnd(0.455545, 2.12, 0.777187);
+	Vector3D intersect(0, 0, 0);
+	bool does = vecUtils.LineTriangleIntersect(point, lineEnd, &vertex1, &vertex2, &vertex3, intersect);
 
-	cout << vector3 << endl;
-
-	/*
-	Vector3D theVector(0, 0, 0);//Instantiate the vector class
-
-	//Set values directly
-	theVector.x = 1;
-	theVector.y = 1;
-	theVector.z = 1;
-
-	//Multiply operator
-	theVector *= 5;
-
-	cout << theVector << endl;//Print out using stream
-
-	theVector.x += 5;//Add 5 to x
-
-	cout << theVector << endl;
-
-	//Dot product of two vectors
-	Vector3D newVector(1, 2, 3);
-	cout << vecUtils.dot(theVector, newVector) << endl;
+	cout << "Intersect?: " << does << endl;
+	cout << intersect.x << " , " << intersect.y << " , " << intersect.z << endl;
 
 	system("PAUSE");
-	*/
 
 	return 1;
 }

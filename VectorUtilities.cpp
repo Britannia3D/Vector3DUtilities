@@ -33,18 +33,89 @@ Vector3D Vector3DUtils::cross(const Vector3D& A, const Vector3D& B)
 	return crossP;
 }
 
-double Vector3DUtils::dot(Vector3D input1, const Vector3D& input2)
+double Vector3DUtils::dot(Vector3D input1, Vector3D input2)
 {
 	return input1.x * input2.x + input1.y * input2.y + input1.z * input2.z;
 }
 
-Vector3D Vector3DUtils::intersectPoint(Vector3D rayVector, Vector3D rayPoint, Vector3D planeNormal, Vector3D planePoint)
+Vector3D Vector3DUtils::intersectPlane(Vector3D rayVector, Vector3D rayPoint, Vector3D planeNormal, Vector3D planePoint)
 {
 	Vector3D diff = rayPoint - planePoint;
 	double prod1 = dot(diff, planeNormal);
 	double prod2 = dot(rayVector, planeNormal);
 	double prod3 = prod1 / prod2;
 	return rayPoint - rayVector * prod3;
+}
+
+
+//The vector actually intersects the plane given its direction
+bool Vector3DUtils::doesIntersect(Vector3D &n, Vector3D &p0, Vector3D &l0, Vector3D &l)
+{
+	float t;
+	//assuming vectors are all normalized
+	float denom = dot(n, l);
+
+	//if (denom > 1e-6)
+	//{
+	Vector3D p0l0 = p0 - l0;
+	t = dot(p0l0, n) / denom;
+	return (t >= 0);
+	//}
+
+	return false;
+}
+
+
+bool Vector3DUtils::intersectTriangle(Vector3D *intersectPoint, Vector3D rayVector, Vector3D rayPoint, Vector3D A, Vector3D B, Vector3D C)
+{
+	Vector3D dir = cross(B - A, C - A);
+	Vector3D triangleNormal = normalize(dir);
+
+	Vector3D centroid;
+
+	centroid.x = (A.x + B.x + C.x) / 3;
+	centroid.y = (A.y + B.y + C.y) / 3;
+	centroid.z = (A.z + B.z + C.z) / 3;
+
+	//cout << "centroid: " << centroid.x  << " " << centroid.y << " " << centroid.z << endl;
+
+	Vector3D Q = intersectPlane(rayVector, rayPoint, triangleNormal, centroid);
+
+	bool does = doesIntersect(triangleNormal, centroid, rayPoint, rayVector);
+	cout << "intersect plane?: " << does << endl;
+
+	Vector3D op1 = cross((B - A), (Q - A));
+	Vector3D op2 = cross((C - B), (Q - B));
+	Vector3D op3 = cross((A - C), (Q - C));
+
+	//dot(op1, triangleNormal);
+	//dot(op2, triangleNormal);
+	//dot(op3, triangleNormal);
+	//Vector3D op1b = dot(op1, triangleNormal);
+	//Vector3D op2b = dot(op2, triangleNormal);
+	//Vector3D op3b = dot(op3, triangleNormal);
+
+	//cout << op1b.x << " " << op1b.y << " " << op1b.z << endl;
+	//cout << op2b.x << " " << op2b.y << " " << op2b.z << endl;
+	//cout << op3b.x << " " << op3b.y << " " << op3b.z << endl;
+
+	intersectPoint = &Q;
+
+	cout <<"Intersect at: " << Q.x << " , " << Q.y << " , " << Q.z << endl;
+
+	//Return if intersects the triangle
+	if (dot(op1, triangleNormal) >= 0)
+	{
+		if (dot(op2, triangleNormal) >= 0)
+		{
+			if (dot(op3, triangleNormal) >= 0)
+			{
+				return 1;
+			}
+		}
+	}
+
+	return 0;
 }
 
 //Get arbitrary 3d vector that is perpendicular to the parameter vector
@@ -70,7 +141,7 @@ Vector3D Vector3DUtils::OrbitalPosition(float angle1, float angle2, Vector3D cen
 	float X = radius * cos(Theta) * cos(Phi);
 	float Z = radius * cos(Theta) * sin(Phi);
 
-	return Vector3D(X + centre.x, Y + centre.y, Z + centre.z;);
+	return Vector3D(X + centre.x, Y + centre.y, Z + centre.z);
 }
 
 //Set the length (magnitude) of a given vector
@@ -107,7 +178,7 @@ Vector3D Vector3DUtils::lerp(Vector3D a, Vector3D b, float scale)
 }
 
 
-Vector3D Vector3DUtils::displaceVectorTowards(Vector3D a, Vector3D b, float amount)
+Vector3D Vector3DUtils::displaceVectorTowards(Vector3D a, Vector3D b, float ammount)
 {
 	Vector3D op0(0, 0, 0);
 
@@ -122,7 +193,7 @@ Vector3D Vector3DUtils::displaceVectorTowards(Vector3D a, Vector3D b, float amou
 	float vLen1 = 1 / vLen0;//Amount to scale to increase by 1
 
 	Vector3D op3(op1.x, op1.y, op1.z);
-	op3 *= vLen1 * amount;
+	op3 *= vLen1 * ammount;
 
 	Vector3D op2(0, 0, 0);
 	op2.x = a.x + op3.x;
@@ -148,4 +219,93 @@ Vector3D Vector3DUtils::normalize(Vector3D vec)
 	op.z = vec.z / op1;
 
 	return op;
-} 
+}
+
+Vector3D Vector3DUtils::getNormal(Vector3D vertex1, Vector3D vertex2, Vector3D vertex3)
+{
+	Vector3D dir = cross(vertex2 - vertex1, vertex3 - vertex1);
+	Vector3D norm = normalize(dir);
+
+	return norm;
+}
+
+bool Vector3DUtils::RayTriangleIntersect(Vector3D rayOrigin, Vector3D rayVector, Vector3D* v1, Vector3D* v2, Vector3D* v3, Vector3D& outIntersectionPoint)
+{
+	const float EPSILON = 0.0000001;
+	Vector3D vertex0 = *v1;
+	Vector3D vertex1 = *v2;
+	Vector3D vertex2 = *v3;
+	Vector3D edge1, edge2, h, s, q;
+	float a, f, u, v;
+	edge1 = vertex1 - vertex0;
+	edge2 = vertex2 - vertex0;
+
+	h = cross(rayVector, edge2);
+
+	a = dot(edge1, h);
+	if (a > -EPSILON && a < EPSILON)
+		return false;  
+	
+	f = 1.0 / a;
+	s = rayOrigin - vertex0;
+	u = f * dot(s, h);
+	if (u < 0.0 || u > 1.0)
+		return false;
+	
+	q = cross(s, edge1);
+	v = f * dot(rayVector, q);
+	if (v < 0.0 || u + v > 1.0)
+		return false;
+	
+	float t = f * dot(edge2, q);
+	if (t > EPSILON)
+	{
+		outIntersectionPoint = rayOrigin + rayVector * t;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool Vector3DUtils::LineTriangleIntersect(Vector3D lineStart, Vector3D lineEnd, Vector3D* v1, Vector3D* v2, Vector3D* v3, Vector3D& outIntersectionPoint)
+{
+	Vector3D rayVector(0,0,0);
+	rayVector = lineEnd - lineStart;
+
+	const float EPSILON = 0.0000001;
+	Vector3D vertex0 = *v1;
+	Vector3D vertex1 = *v2;
+	Vector3D vertex2 = *v3;
+	Vector3D edge1, edge2, h, s, q;
+	float a, f, u, v;
+	edge1 = vertex1 - vertex0;
+	edge2 = vertex2 - vertex0;
+
+	h = cross(rayVector, edge2);
+
+	a = dot(edge1, h);
+	if (a > -EPSILON && a < EPSILON)
+		return false;
+
+	f = 1.0 / a;
+	s = lineStart - vertex0;
+	u = f * dot(s, h);
+	if (u < 0.0 || u > 1.0)
+		return false;
+
+	q = cross(s, edge1);
+	v = f * dot(rayVector, q);
+	if (v < 0.0 || u + v > 1.0)
+		return false;
+
+	float t = f * dot(edge2, q);
+	if (t > EPSILON)
+	{
+		outIntersectionPoint = lineStart + rayVector * t;
+		return true;
+	}
+	else
+		return false;
+
+	return true;
+}

@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * Author: David McHale, <mchale.d@yahoo.com>
  *
@@ -8,8 +10,6 @@
  * All algorithms untested, use at your own risk!
  *
 */
-
-#pragma once
 
 //Self-contained 3D vector class. Additional utility functions in ::Vector3DUtils
 class Vector3D
@@ -141,17 +141,23 @@ public:
 	Vector3D cross(const Vector3D& A, const Vector3D& B);
 
 	//Dot product
-	double dot(Vector3D input1, const Vector3D& input2);
+	double dot(Vector3D input1, Vector3D input2);
 
 	//Vector plane intersect
-	Vector3D intersectPoint(Vector3D rayVector, Vector3D rayPoint, Vector3D planeNormal, Vector3D planePoint);
+	Vector3D intersectPlane(Vector3D rayVector, Vector3D rayPoint, Vector3D planeNormal, Vector3D planePoint);
+
+	//Intersects based on direction
+	bool doesIntersect(Vector3D &n, Vector3D &p0, Vector3D &l0, Vector3D &l);
+
+	//Vector intersect triangle
+	bool intersectTriangle(Vector3D *intersectPoint, Vector3D rayVector, Vector3D rayPoint, Vector3D vertex1, Vector3D vertex2, Vector3D vertex3);
 
 	//Get arbitrary 3d vector that is perpendicular to the parameter vector	
 	//There are infinite such vectors, return one such.
 	Vector3D arbitraryOrthogonal(Vector3D vec);
 
 	//Use spherical coordinates to get a position
-	Vector3D OrbitalPosition(float angle1, float angle2, Vector3D centre);
+	Vector3D OrbitalPosition(float angle1, float angle2, Vector3D centre, float radius);
 
 	//Set the length (magnitude) of a given vector
 	Vector3D setVectorMagitude(Vector3D input, float newMag);
@@ -163,8 +169,16 @@ public:
 	Vector3D lerp(Vector3D a, Vector3D b, float scale);
 
 	//Move vector towards another vector by a set amount
-	Vector3D displaceVectorTowards(Vector3D a, Vector3D b, float amount);
-	
-	//Normalize a vector
+	Vector3D displaceVectorTowards(Vector3D a, Vector3D b, float ammount);
+
 	Vector3D normalize(Vector3D vec);
+
+	//Get the normal of a triangle (3 vertices)
+	Vector3D getNormal(Vector3D vertex1, Vector3D vertex2, Vector3D vertex3);
+	
+	//Infinite ray triangle intersect
+	bool RayTriangleIntersect(Vector3D rayOrigin, Vector3D rayVector, Vector3D* v1, Vector3D* v2, Vector3D* v3, Vector3D& outIntersectionPoint);
+	
+	//Line triangle intersect
+	bool LineTriangleIntersect(Vector3D lineStart, Vector3D lineEnd, Vector3D* v1, Vector3D* v2, Vector3D* v3, Vector3D& outIntersectionPoint);
 };
