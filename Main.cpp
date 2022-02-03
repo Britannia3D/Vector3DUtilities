@@ -21,10 +21,10 @@ int main()
 	Vector3D vertex2(0.140595, 2.06562, 1.10034);
 	Vector3D vertex3(0.159295, 2.72633, 1.10034);
 
-	Vector3D point(0.455545, 2.34121, 1.49899);
+	Vector3D lineStart(0.455545, 2.34121, 1.49899);
 	Vector3D lineEnd(0.455545, 2.12, 0.777187);
 	Vector3D intersect(0, 0, 0);
-	bool does = vecUtils.LineTriangleIntersect(point, lineEnd, &vertex1, &vertex2, &vertex3, intersect);
+	bool does = vecUtils.LineTriangleIntersect(lineStart, lineEnd, &vertex1, &vertex2, &vertex3, &intersect);
 
 	cout << "Intersect?: " << does << endl;
 	cout << intersect.x << " , " << intersect.y << " , " << intersect.z << endl;

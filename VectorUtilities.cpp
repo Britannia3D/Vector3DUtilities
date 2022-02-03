@@ -267,10 +267,14 @@ bool Vector3DUtils::RayTriangleIntersect(Vector3D rayOrigin, Vector3D rayVector,
 		return false;
 }
 
-bool Vector3DUtils::LineTriangleIntersect(Vector3D lineStart, Vector3D lineEnd, Vector3D* v1, Vector3D* v2, Vector3D* v3, Vector3D& outIntersectionPoint)
+
+//Algorithm to test if the line actually reaches the poly rather than extending to infinity
+bool Vector3DUtils::LineTriangleIntersect(Vector3D lineStart, Vector3D lineEnd, Vector3D* v1, Vector3D* v2, Vector3D* v3, Vector3D* outIntersectionPoint)
 {
 	Vector3D rayVector(0,0,0);
-	rayVector = lineEnd - lineStart;
+	rayVector = vecUtils.normalize(lineEnd - lineStart);
+
+	//Vector3D rayVector(0, 0, -1);
 
 	const float EPSILON = 0.0000001;
 	Vector3D vertex0 = *v1;
@@ -281,31 +285,65 @@ bool Vector3DUtils::LineTriangleIntersect(Vector3D lineStart, Vector3D lineEnd, 
 	edge1 = vertex1 - vertex0;
 	edge2 = vertex2 - vertex0;
 
+	//h = rayVector.crossProduct(edge2);
 	h = cross(rayVector, edge2);
 
+	//a = edge1.dotProduct(h);
 	a = dot(edge1, h);
 	if (a > -EPSILON && a < EPSILON)
-		return false;
+		return false;//This ray is parallel to this triangle.
 
 	f = 1.0 / a;
 	s = lineStart - vertex0;
-	u = f * dot(s, h);
+	u = f * dot(s, h);//s.dotProduct(h);
 	if (u < 0.0 || u > 1.0)
 		return false;
 
-	q = cross(s, edge1);
-	v = f * dot(rayVector, q);
+	q = cross(s, edge1);//s.crossProduct(edge1);
+	v = f * dot(rayVector, q);//rayVector.dotProduct(q);
 	if (v < 0.0 || u + v > 1.0)
 		return false;
 
-	float t = f * dot(edge2, q);
-	if (t > EPSILON)
+	//At this stage we can compute t to find out where the intersection point is on the line.
+	float t = f * dot(edge2, q);//edge2.dotProduct(q);
+	if (t > EPSILON)//ray intersection
 	{
-		outIntersectionPoint = lineStart + rayVector * t;
-		return true;
+		*outIntersectionPoint = lineStart + rayVector * t;
+		//return true;
+	}
+	else//This means that there is a line intersection but not a ray intersection.
+	{
+		return false;
+	}
+
+	float d1 = dist(lineStart.x, lineStart.y, lineStart.z, outIntersectionPoint->x, outIntersectionPoint->y, outIntersectionPoint->z);
+	float d2 = dist(lineEnd.x, lineEnd.y, lineEnd.z, outIntersectionPoint->x, outIntersectionPoint->y, outIntersectionPoint->z);
+	
+	bool furthest = 0;
+	if (d1 < d2) { furthest = 1; }
+
+	float lineLength = dist(lineStart.x, lineStart.y, lineStart.z, lineEnd.x, lineEnd.y, lineEnd.z);
+
+	if (furthest == 0)//D2
+	{	
+		if (lineLength > d1)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	else
-		return false;
-
-	return true;
+	{
+		if (lineLength > d2)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

@@ -1,5 +1,3 @@
-#pragma once
-
 /*
  * Author: David McHale, <mchale.d@yahoo.com>
  *
@@ -10,6 +8,8 @@
  * All algorithms untested, use at your own risk!
  *
 */
+
+#pragma once
 
 //Self-contained 3D vector class. Additional utility functions in ::Vector3DUtils
 class Vector3D
@@ -180,5 +180,5 @@ public:
 	bool RayTriangleIntersect(Vector3D rayOrigin, Vector3D rayVector, Vector3D* v1, Vector3D* v2, Vector3D* v3, Vector3D& outIntersectionPoint);
 	
 	//Line triangle intersect
-	bool LineTriangleIntersect(Vector3D lineStart, Vector3D lineEnd, Vector3D* v1, Vector3D* v2, Vector3D* v3, Vector3D& outIntersectionPoint);
+	bool LineTriangleIntersect(Vector3D lineStart, Vector3D lineEnd, Vector3D* v1, Vector3D* v2, Vector3D* v3, Vector3D* outIntersectionPoint);
 };
