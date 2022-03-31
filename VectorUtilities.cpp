@@ -5,6 +5,8 @@
 
 using namespace std;
 
+Vector3DUtils vector3DUtils;
+
 //Euclidean distance
 float Vector3DUtils::dist(float x1, float y1, float z1, float x2, float y2, float z2)
 {
@@ -28,8 +30,6 @@ float Vector3DUtils::angularDifference(Vector3D a, Vector3D b)
 	float angle = std::acos(dot(a, b) / (length(a)*length(b)));
 	return angle;
 }
-
-
 
 double Vector3DUtils::dot(Vector3D input1, const Vector3D& input2)
 {
@@ -113,7 +113,7 @@ Vector3D Vector3DUtils::lerp(Vector3D a, Vector3D b, float scale)
 Vector3D Vector3DUtils::displaceVectorTowards(Vector3D a, Vector3D b, float amount)
 {
 
-	if (utils.dist(a.x, a.y, a.z, b.x, b.y, b.z) <= 0.0)
+	if (dist(a.x, a.y, a.z, b.x, b.y, b.z) <= 0.0)
 	{
 		//Vector3D op4(256, 256, 256);
 		return(a);
@@ -175,8 +175,6 @@ bool Vector3DUtils::LineTriangleIntersect(Vector3D lineStart, Vector3D lineEnd, 
 {
 	rayVector = vector3DUtils.normalize(lineEnd - lineStart);
 
-	//Vector3D rayVector(0, 0, -1);
-
 	vertex0 = v1;
 	vertex1 = v2;
 	vertex2 = v3;
@@ -185,39 +183,31 @@ bool Vector3DUtils::LineTriangleIntersect(Vector3D lineStart, Vector3D lineEnd, 
 	edge1 = vertex1 - vertex0;
 	edge2 = vertex2 - vertex0;
 
-	
-	//h = rayVector.crossProduct(edge2);
 	h = cross(rayVector, edge2);
 
-
-	//a = edge1.dotProduct(h);
 	a = dot(edge1, h);
 
 	if (a > -EPSILON && a < EPSILON)
-		return false;//This ray is parallel to this triangle.
-
+		return false;
 
 	f = 1.0 / a;
 	s = lineStart - vertex0;
-	u = f * dot(s, h);//s.dotProduct(h);
+	u = f * dot(s, h);
 	if (u < 0.0 || u > 1.0)
 		return false;
 
 
-	q = cross(s, edge1);//s.crossProduct(edge1);
-	v = f * dot(rayVector, q);//rayVector.dotProduct(q);
+	q = cross(s, edge1);
+	v = f * dot(rayVector, q);
 	if (v < 0.0 || u + v > 1.0)
 		return false;
 
-
-	//At this stage we can compute t to find out where the intersection point is on the line.
-	float t = f * dot(edge2, q);//edge2.dotProduct(q);
-	if (t > EPSILON)//ray intersection
+	float t = f * dot(edge2, q);
+	if (t > EPSILON)
 	{
 		*outIntersectionPoint = lineStart + rayVector * t;
-		//return true;
 	}
-	else//No ray intersection
+	else
 	{
 		return false;
 	}
@@ -265,33 +255,30 @@ bool Vector3DUtils::RayTriangleIntersect(Vector3D rayOrigin, Vector3D rayVector,
 	edge1 = vertex1 - vertex0;
 	edge2 = vertex2 - vertex0;
 
-	//h = rayVector.crossProduct(edge2);
 	h = cross(rayVector, edge2);
 
-	//a = edge1.dotProduct(h);
 	a = dot(edge1, h);
 	if (a > -EPSILON && a < EPSILON)
-		return false;    // This ray is parallel to this triangle.
+		return false;
 
 	f = 1.0 / a;
 	s = rayOrigin - vertex0;
-	u = f * dot(s, h);//s.dotProduct(h);
+	u = f * dot(s, h);
 	if (u < 0.0 || u > 1.0)
 		return false;
 
-	q = cross(s, edge1);// s.crossProduct(edge1);
-	v = f * dot(rayVector, q);// rayVector.dotProduct(q);
+	q = cross(s, edge1);
+	v = f * dot(rayVector, q);
 	if (v < 0.0 || u + v > 1.0)
 		return false;
 
-	// At this stage we can compute t to find out where the intersection point is on the line.
-	float t = f * dot(edge2, q);// edge2.dotProduct(q);
-	if (t > EPSILON) // ray intersection
+	float t = f * dot(edge2, q);
+	if (t > EPSILON)
 	{
 		outIntersectionPoint = rayOrigin + rayVector * t;
 		return true;
 	}
-	else // This means that there is a line intersection but not a ray intersection.
+	else
 		return false;
 }
 
@@ -371,9 +358,7 @@ void Vector3DUtils::MxVpV(float Vr[3], const float M1[3][3], const float V1[3], 
 //-------------------------------------
 //
 //-------------------------------------
-void Vector3DUtils::SegPoints(float VEC[3], float X[3], float Y[3], // closest points
-	const float P[3], const float A[3], // seg 1 origin, vector
-	const float Q[3], const float B[3]) // seg 2 origin, vector
+void Vector3DUtils::SegPoints(float VEC[3], float X[3], float Y[3],	const float P[3], const float A[3], const float Q[3], const float B[3]) 
 {
 	float T[3], A_dot_A, B_dot_B, A_dot_B, A_dot_T, B_dot_T;
 	float TMP[3];
@@ -385,45 +370,35 @@ void Vector3DUtils::SegPoints(float VEC[3], float X[3], float Y[3], // closest p
 	A_dot_T = VdotV(A, T);
 	B_dot_T = VdotV(B, T);
 
-	// t parameterizes ray P,A 
-	// u parameterizes ray Q,B 
-
 	float t, u;
-
-	// compute t for the closest point on ray P,A to
-	// ray Q,B
 
 	float denom = A_dot_A * B_dot_B - A_dot_B * A_dot_B;
 
 	t = (A_dot_T*B_dot_B - B_dot_T * A_dot_B) / denom;
 
-	// clamp result so t is on the segment P,A
 
 	if ((t < 0) || isnan(t)) t = 0; else if (t > 1) t = 1;
 
-	// find u for point on ray Q,B closest to point at t
-
 	u = (t*A_dot_B - B_dot_T) / B_dot_B;
 
-	// if u is on segment Q,B, t and u correspond to 
-	// closest points, otherwise, clamp u, recompute and
-	// clamp t 
-
-	if ((u <= 0) || isnan(u)) {
-
+	if ((u <= 0) || isnan(u))
+	{
 		VcV(Y, Q);
 
 		t = A_dot_T / A_dot_A;
 
-		if ((t <= 0) || isnan(t)) {
+		if ((t <= 0) || isnan(t))
+		{
 			VcV(X, P);
 			VmV(VEC, Q, P);
 		}
-		else if (t >= 1) {
+		else if (t >= 1)
+		{
 			VpV(X, P, A);
 			VmV(VEC, Q, X);
 		}
-		else {
+		else
+		{
 			VpVxS(X, P, A, t);
 			VcrossV(TMP, T, A);
 			VcrossV(VEC, A, TMP);
@@ -476,11 +451,41 @@ void Vector3DUtils::SegPoints(float VEC[3], float X[3], float Y[3], // closest p
 }
 
 
+
 //-------------------------------------
 // Minimum distance between two triangles
 //-------------------------------------
-float Vector3DUtils::triDist(float P[3], float Q[3], const float S[3][3], const float T[3][3])
+float Vector3DUtils::triangleDistance(float IntersectPointA[3], float IntersectPointB[3], Vector3D vA1, Vector3D vA2, Vector3D vA3, Vector3D vB1, Vector3D vB2, Vector3D vB3)
 {
+	float S[3][3];
+	float T[3][3];
+
+	S[0][0] = vA1.x;
+	S[0][1] = vA1.y;
+	S[0][2] = vA1.z;
+
+	S[1][0] = vA2.x;
+	S[1][1] = vA2.y;
+	S[1][2] = vA2.z;
+
+	S[2][0] = vA3.x;
+	S[2][1] = vA3.y;
+	S[2][2] = vA3.z;
+
+
+	T[0][0] = vB1.x;
+	T[0][1] = vB1.y;
+	T[0][2] = vB1.z;
+
+	T[1][0] = vB2.x;
+	T[1][1] = vB2.y;
+	T[1][2] = vB2.z;
+
+	T[2][0] = vB3.x;
+	T[2][1] = vB3.y;
+	T[2][2] = vB3.z;
+
+
 	//Compute vectors along the 6 sides
 
 	float Sv[3][3], Tv[3][3];
@@ -499,32 +504,26 @@ float Vector3DUtils::triDist(float P[3], float Q[3], const float S[3][3], const 
 	float minP[3], minQ[3], mindd;
 	int shown_disjoint = 0;
 
-	mindd = VdistV2(S[0], T[0]) + 1;  // Set first minimum safely high
+	mindd = VdistV2(S[0], T[0]) + 1; 
 
 	for (unsigned short i = 0; i < 3; i++)
 	{
 		for (unsigned short j = 0; j < 3; j++)
 		{
-			// Find closest points on edges i & j, plus the 
-			// vector (and distance squared) between these points
+			SegPoints(VEC, IntersectPointA, IntersectPointB, S[i], Sv[i], T[j], Tv[j]);
 
-			SegPoints(VEC, P, Q, S[i], Sv[i], T[j], Tv[j]);
-
-			VmV(V, Q, P);
+			VmV(V, IntersectPointB, IntersectPointA);
 			float dd = VdotV(V, V);
-
-			// Verify this closest point pair only if the distance 
-			// squared is less than the minimum found thus far.
 
 			if (dd <= mindd)
 			{
-				VcV(minP, P);
-				VcV(minQ, Q);
+				VcV(minP, IntersectPointA);
+				VcV(minQ, IntersectPointB);
 				mindd = dd;
 
-				VmV(Z, S[(i + 2) % 3], P);
+				VmV(Z, S[(i + 2) % 3], IntersectPointA);
 				float a = VdotV(Z, VEC);
-				VmV(Z, T[(j + 2) % 3], Q);
+				VmV(Z, T[(j + 2) % 3], IntersectPointB);
 				float b = VdotV(Z, VEC);
 
 				if ((a <= 0) && (b >= 0)) return sqrt(dd);
@@ -538,17 +537,12 @@ float Vector3DUtils::triDist(float P[3], float Q[3], const float S[3][3], const 
 		}
 	}
 
-
 	float Sn[3], Snl;
-	VcrossV(Sn, Sv[0], Sv[1]); // Compute normal to S triangle
-	Snl = VdotV(Sn, Sn);      // Compute square of length of normal
-
-	// If cross product is long enough,
+	VcrossV(Sn, Sv[0], Sv[1]);
+	Snl = VdotV(Sn, Sn);
 
 	if (Snl > 1e-15)
 	{
-		// Get projection lengths of T points
-
 		float Tp[3];
 
 		VmV(V, S[0], T[0]);
@@ -559,10 +553,6 @@ float Vector3DUtils::triDist(float P[3], float Q[3], const float S[3][3], const 
 
 		VmV(V, S[0], T[2]);
 		Tp[2] = VdotV(V, Sn);
-
-		// If Sn is a separating direction,
-		// find point with smallest projection
-
 		int point = -1;
 		if ((Tp[0] > 0) && (Tp[1] > 0) && (Tp[2] > 0))
 		{
@@ -575,14 +565,9 @@ float Vector3DUtils::triDist(float P[3], float Q[3], const float S[3][3], const 
 			if (Tp[2] > Tp[point]) point = 2;
 		}
 
-		// If Sn is a separating direction, 
-
 		if (point >= 0)
 		{
 			shown_disjoint = 1;
-
-			// Test whether the point found, when projected onto the 
-			// other triangle, lies within the face.
 
 			VmV(V, T[point], S[0]);
 			VcrossV(Z, Sn, Sv[0]);
@@ -596,12 +581,9 @@ float Vector3DUtils::triDist(float P[3], float Q[3], const float S[3][3], const 
 					VcrossV(Z, Sn, Sv[2]);
 					if (VdotV(V, Z) > 0)
 					{
-						// T[point] passed the test - it's a closest point for 
-						// the T triangle; the other point is on the face of S
-
-						VpVxS(P, T[point], Sn, Tp[point] / Snl);
-						VcV(Q, T[point]);
-						return sqrt(VdistV2(P, Q));
+						VpVxS(IntersectPointA, T[point], Sn, Tp[point] / Snl);
+						VcV(IntersectPointB, T[point]);
+						return sqrt(VdistV2(IntersectPointA, IntersectPointB));
 					}
 				}
 			}
@@ -653,11 +635,11 @@ float Vector3DUtils::triDist(float P[3], float Q[3], const float S[3][3], const 
 					VcrossV(Z, Tn, Tv[2]);
 					if (VdotV(V, Z) > 0)
 					{
-						VcV(P, S[point]);
-						VpVxS(Q, S[point], Tn, Sp[point] / Tnl);
+						VcV(IntersectPointA, S[point]);
+						VpVxS(IntersectPointB, S[point], Tn, Sp[point] / Tnl);
 
 
-						return sqrt(VdistV2(P, Q));
+						return sqrt(VdistV2(IntersectPointA, IntersectPointB));
 					}
 				}
 			}
@@ -666,8 +648,8 @@ float Vector3DUtils::triDist(float P[3], float Q[3], const float S[3][3], const 
 
 	if (shown_disjoint)
 	{
-		VcV(P, minP);
-		VcV(Q, minQ);
+		VcV(IntersectPointA, minP);
+		VcV(IntersectPointB, minQ);
 		return sqrt(mindd);
 	}
 	else return 0;

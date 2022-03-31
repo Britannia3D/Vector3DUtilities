@@ -160,7 +160,7 @@ public:
 
 	bool LineTriangleIntersect(Vector3D lineStart, Vector3D lineEnd, Vector3D v1, Vector3D v2, Vector3D v3, Vector3D* outIntersectionPoint);
 
-	float triDist(float P[3], float Q[3], const float S[3][3], const float T[3][3]);//Minimum distance between two triangles
+	float triangleDistance(float IntersectPointA[3], float IntersectPointB[3], Vector3D pA1, Vector3D pA2, Vector3D pA3, Vector3D pB1, Vector3D pB2, Vector3D pB3);//Minimum distance between two triangles
 
 	void triangleBoundingBox(Vector3D v1, Vector3D v2, Vector3D v3, Vector3D *minX, Vector3D *maxX, Vector3D *minY, Vector3D *maxY, Vector3D *minZ, Vector3D *maxZ);
 
