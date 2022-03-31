@@ -1,14 +1,3 @@
-/*
- * Author: David McHale, <mchale.d@yahoo.com>
- *
- * (C) Copyright 2022
- *
- * MIT License
- *
- * All algorithms untested, use at your own risk!
- *
-*/
-
 #pragma once
 
 //Self-contained 3D vector class. Additional utility functions in ::Vector3DUtils
@@ -58,7 +47,6 @@ public:
 		return Vector3D(x / inputVector.x, y / inputVector.y, z / inputVector.z);
 	}
 
-
 	//Add floating point to vector
 	Vector3D operator+(double f) const
 	{
@@ -83,9 +71,7 @@ public:
 		return Vector3D(f / x, f / y, f / z);
 	}
 
-
 	//[Cumulative operations]
-
 	void operator+=(const Vector3D& inputVector)
 	{
 		this->x = inputVector.x + this->x;
@@ -141,23 +127,17 @@ public:
 	Vector3D cross(const Vector3D& A, const Vector3D& B);
 
 	//Dot product
-	double dot(Vector3D input1, Vector3D input2);
+	double dot(Vector3D input1, const Vector3D& input2);
 
 	//Vector plane intersect
-	Vector3D intersectPlane(Vector3D rayVector, Vector3D rayPoint, Vector3D planeNormal, Vector3D planePoint);
-
-	//Intersects based on direction
-	bool doesIntersect(Vector3D &n, Vector3D &p0, Vector3D &l0, Vector3D &l);
-
-	//Vector intersect triangle
-	bool intersectTriangle(Vector3D *intersectPoint, Vector3D rayVector, Vector3D rayPoint, Vector3D vertex1, Vector3D vertex2, Vector3D vertex3);
+	Vector3D intersectPoint(Vector3D rayVector, Vector3D rayPoint, Vector3D planeNormal, Vector3D planePoint);
 
 	//Get arbitrary 3d vector that is perpendicular to the parameter vector	
 	//There are infinite such vectors, return one such.
 	Vector3D arbitraryOrthogonal(Vector3D vec);
 
 	//Use spherical coordinates to get a position
-	Vector3D OrbitalPosition(float angle1, float angle2, Vector3D centre, float radius);
+	Vector3D OrbitalPosition(float angle1, float angle2, Vector3D centroid);
 
 	//Set the length (magnitude) of a given vector
 	Vector3D setVectorMagitude(Vector3D input, float newMag);
@@ -169,16 +149,34 @@ public:
 	Vector3D lerp(Vector3D a, Vector3D b, float scale);
 
 	//Move vector towards another vector by a set amount
-	Vector3D displaceVectorTowards(Vector3D a, Vector3D b, float ammount);
+	Vector3D displaceVectorTowards(Vector3D a, Vector3D b, float amount);
+
+	//Scalar difference between two 3D vectors
+	float angularDifference(Vector3D a, Vector3D b);
 
 	Vector3D normalize(Vector3D vec);
 
-	//Get the normal of a triangle (3 vertices)
-	Vector3D getNormal(Vector3D vertex1, Vector3D vertex2, Vector3D vertex3);
-	
-	//Infinite ray triangle intersect
 	bool RayTriangleIntersect(Vector3D rayOrigin, Vector3D rayVector, Vector3D* v1, Vector3D* v2, Vector3D* v3, Vector3D& outIntersectionPoint);
-	
-	//Line triangle intersect
-	bool LineTriangleIntersect(Vector3D lineStart, Vector3D lineEnd, Vector3D* v1, Vector3D* v2, Vector3D* v3, Vector3D* outIntersectionPoint);
+
+	bool LineTriangleIntersect(Vector3D lineStart, Vector3D lineEnd, Vector3D v1, Vector3D v2, Vector3D v3, Vector3D* outIntersectionPoint);
+
+	float triDist(float P[3], float Q[3], const float S[3][3], const float T[3][3]);//Minimum distance between two triangles
+
+	void triangleBoundingBox(Vector3D v1, Vector3D v2, Vector3D v3, Vector3D *minX, Vector3D *maxX, Vector3D *minY, Vector3D *maxY, Vector3D *minZ, Vector3D *maxZ);
+
+private:
+
+	//[For triangle - triangle distance]
+	void VmV(float Vr[3], const float V1[3], const float V2[3]);
+	float VdotV(const float V1[3], const float V2[3]);
+	void VcV(float Vr[3], const float V[3]);
+	void VpV(float Vr[3], const float V1[3], const float V2[3]);
+	void VpVxS(float Vr[3], const float V1[3], const float V2[3], float s);
+	void VcrossV(float Vr[3], const float V1[3], const float V2[3]);
+	void VxS(float Vr[3], const float V[3], float s);
+	float VdistV2(const float V1[3], const float V2[3]);
+	void MxVpV(float Vr[3], const float M1[3][3], const float V1[3], const float V2[3]);
+	void SegPoints(float VEC[3], float X[3], float Y[3], const float P[3], const float A[3], const float Q[3], const float B[3]);
+
+	bool passesPlane(Vector3D lineStart, Vector3D lineEnd, Vector3D* v1, Vector3D* v2, Vector3D* v3);
 };
