@@ -1,6 +1,8 @@
 #pragma once
 
-//Self-contained 3D vector class. Additional utility functions in ::Vector3DUtils
+/////////////////////////////////////////////////////////////////////////
+// Self-contained 3D vector class.Utility functions in ::Vector3DUtils
+/////////////////////////////////////////////////////////////////////////
 class Vector3D
 {
 public:
@@ -95,9 +97,9 @@ public:
 
 	void operator/=(const Vector3D& inputVector)
 	{
-		this->x = inputVector.x / this->x;
-		this->y = inputVector.y / this->y;
-		this->z = inputVector.z / this->z;
+		this->x = this->x / inputVector.x;
+		this->y = this->y / inputVector.y;
+		this->z = this->z / inputVector.z;
 	}
 
 	void operator*=(double f)
@@ -109,13 +111,17 @@ public:
 
 	void operator/=(double f)
 	{
-		this->x = f / this->x;
-		this->y = f / this->y;
-		this->z = f / this->z;
+		this->x = this->x / f;
+		this->y = this->y / f;
+		this->z = this->z / f;
 	}
 };
 
 
+
+/////////////////////////////////////////////////////////////////////////
+// Vector Utilties
+/////////////////////////////////////////////////////////////////////////
 class Vector3DUtils
 {
 public:
@@ -140,7 +146,7 @@ public:
 	Vector3D OrbitalPosition(float angle1, float angle2, Vector3D centroid);
 
 	//Set the length (magnitude) of a given vector
-	Vector3D setVectorMagitude(Vector3D input, float newMag);
+	Vector3D setVectorMagnitude(Vector3D input, float newMag);
 
 	//Get magnitude of vector
 	double length(Vector3D vec);
@@ -148,7 +154,7 @@ public:
 	//Linear interpolation
 	Vector3D lerp(Vector3D a, Vector3D b, float scale);
 
-	//Move vector towards another vector by a set amount
+	//Move vector a towards b by a set amount
 	Vector3D displaceVectorTowards(Vector3D a, Vector3D b, float amount);
 
 	//Scalar difference between two 3D vectors
@@ -160,9 +166,19 @@ public:
 
 	bool LineTriangleIntersect(Vector3D lineStart, Vector3D lineEnd, Vector3D v1, Vector3D v2, Vector3D v3, Vector3D* outIntersectionPoint);
 
-	float triangleDistance(float IntersectPointA[3], float IntersectPointB[3], Vector3D pA1, Vector3D pA2, Vector3D pA3, Vector3D pB1, Vector3D pB2, Vector3D pB3);//Minimum distance between two triangles
+	bool vectorPointsTowards(Vector3D centroid, Vector3D a, Vector3D b);//Return if two vectors point towards or away
 
-	void triangleBoundingBox(Vector3D v1, Vector3D v2, Vector3D v3, Vector3D *minX, Vector3D *maxX, Vector3D *minY, Vector3D *maxY, Vector3D *minZ, Vector3D *maxZ);
+	Vector3D closestPlanePoint(Vector3D pointPosition, Vector3D planePosition, Vector3D planeNormal);
+
+	Vector3D getTriangleNormal(Vector3D A, Vector3D B, Vector3D C);
+
+	float trianglePointDist(Vector3D v1, Vector3D v2, Vector3D v3, Vector3D point);
+
+	float triangleTriangleDistance(float IntersectPointA[3], float IntersectPointB[3], Vector3D pA1, Vector3D pA2, Vector3D pA3, Vector3D pB1, Vector3D pB2, Vector3D pB3);//Minimum distance between two triangles;
+
+	Vector3D closestTrianglePoint(const Vector3D *triangle, const Vector3D &position);
+
+	float pointDistanceToTriangle(Vector3D pointPosition, Vector3D A, Vector3D B, Vector3D C);
 
 private:
 
@@ -177,6 +193,4 @@ private:
 	float VdistV2(const float V1[3], const float V2[3]);
 	void MxVpV(float Vr[3], const float M1[3][3], const float V1[3], const float V2[3]);
 	void SegPoints(float VEC[3], float X[3], float Y[3], const float P[3], const float A[3], const float Q[3], const float B[3]);
-
-	bool passesPlane(Vector3D lineStart, Vector3D lineEnd, Vector3D* v1, Vector3D* v2, Vector3D* v3);
 };
