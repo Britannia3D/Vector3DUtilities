@@ -5,10 +5,8 @@
 
 using namespace std;
 
-int main()
+void main()
 {
-
+	//Instantiate vectorUtils class
 	Vector3DUtils vecUtils;
-
-	return 1;
 }
