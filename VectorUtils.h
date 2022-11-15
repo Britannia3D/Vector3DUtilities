@@ -171,7 +171,7 @@ public:
 	//Dot product
 	double dot(Vector3D input1, const Vector3D& input2);
 
-	Vector3D VectorUtils::arbitraryOrthogonal(Vector3D vec);
+	Vector3D arbitraryOrthogonal(Vector3D vec);
 
 	//Set the length (magnitude) of a given vector
 	Vector3D setVectorMagnitude(Vector3D input, float newMag);
@@ -193,7 +193,7 @@ public:
 
 	float angularDifference(Vector3D a, Vector3D b);
 
-	bool rayTriangleIntersect(Vector3D rayOrigin, Vector3D rayVector, Vector3D* v1, Vector3D* v2, Vector3D* v3, Vector3D& outIntersectionPoint);//Möller–Trumbore intersection algorithm
+	bool rayTriangleIntersect(Vector3D rayOrigin, Vector3D rayVector, Vector3D* v1, Vector3D* v2, Vector3D* v3, Vector3D& outIntersectionPoint);//MÃ¶llerâ€“Trumbore intersection algorithm
 
 	bool insideTriangle2D(Vector3D pt, Vector3D v1, Vector3D v2, Vector3D v3);
 
