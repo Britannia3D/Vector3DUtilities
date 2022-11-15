@@ -205,15 +205,11 @@ public:
 
 	bool pointOnLine_3(Vector3D a, Vector3D b, Vector3D point);//The intersect point lies within the two line points
 
-	Vector3D OrbitalPosition(float angle1, float angle2, Vector3D centroid, float radius);
-
 	float angularDifference2D(float p1x, float p1y, float p2x, float p2y);
 
-	Vector3D toSpherical(float x, float y, float z);//Cartesan to spherical (Similar to orbit function)
+	Vector3D cartesanToSpherical(float x, float y, float z);//Cartesan to spherical (Orbit function)
 
-	Vector3D toCartesan(float theta, float phi, float radius);//Spherical to cartesan
-
-	float computeWeighting(Vector3D pos1, Vector3D pos2, float maxDist);//Weighting amount of vec1 to vec2 based on maxDist
+	Vector3D sphericalToCartesan(float theta, float phi, float radius);//Spherical to cartesan
 
 	//Get a vector perpendicular to two 2D vectors
 	Vector2D orthogonalVector2D_CW(Vector2D a, Vector2D b);

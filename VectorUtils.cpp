@@ -47,9 +47,8 @@ bool VectorUtils::pointOnLine_2(Vector3D a, Vector3D b, Vector3D point)
 	}
 }
 
-
 //3D point to spherical coordinates
-Vector3D VectorUtils::toSpherical(float x, float y, float z)
+Vector3D VectorUtils::cartesanToSpherical(float x, float y, float z)
 {
 	float radius = vecUtils.length(Vector3D(x, y, z));
 	float theta = atan2(sqrt(x * x + y * y), z);
@@ -59,7 +58,7 @@ Vector3D VectorUtils::toSpherical(float x, float y, float z)
 }
 
 //Sherical coordinates and radius to 3D point
-Vector3D VectorUtils::toCartesan(float theta, float phi, float radius)
+Vector3D VectorUtils::sphericalToCartesan(float theta, float phi, float radius)
 {
 	float x = radius * cos(phi) * sin(theta);
 	float y = radius * sin(phi) * sin(theta);
@@ -67,34 +66,6 @@ Vector3D VectorUtils::toCartesan(float theta, float phi, float radius)
 
 	return Vector3D(x, y, z);
 }
-
-//Use spherical coordinates to get a position
-Vector3D VectorUtils::OrbitalPosition(float angle1, float angle2, Vector3D centroid, float radius)
-{
-	float sx = centroid.x;// -0.013;
-	float sy = centroid.y;// 1.06;
-	float sz = centroid.z;// 1.06;
-
-	if (angle1 / 0.017 > 90)
-	{
-		angle1 = 90 * 0.017;
-	}
-
-	if (angle1 / 0.017 < -90)
-	{
-		angle1 = -90 * 0.017;
-	}
-
-	float Theta = angle1;
-	float Phi = angle2;
-	float R = radius;
-	float Y = R * sin(Theta);
-	float X = R * cos(Theta) * cos(Phi);
-	float Z = R * cos(Theta) * sin(Phi);
-
-	return Vector3D(X + sx, Y + sy, Z + sz);
-}
-
 
 
 //Set fractional amount from a to b
@@ -199,25 +170,6 @@ Vector2D VectorUtils::orthogonalVector2D_CCW(Vector2D a, Vector2D b)
 	return Vector2D(-a.y, b.x);
 }
 
-//Increased distance = lower weighting
-float VectorUtils::computeWeighting(Vector3D pos1, Vector3D pos2, float maxDist)
-{
-	float dist = utils.dist(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z);
-
-	//return dist;
-
-	if (dist > maxDist)
-	{
-		return 0.0;
-	}
-
-	if (dist > 0)
-	{
-		return 1 - (1 / (maxDist / dist));
-	}
-
-	return 0;
-}
 
 //Only does an infinite line
 Vector3D VectorUtils::closestPointAlongLine(Vector3D lineFrom, Vector3D lineTo, Vector3D c)

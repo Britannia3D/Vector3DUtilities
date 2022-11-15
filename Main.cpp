@@ -10,7 +10,5 @@ int main()
 
 	Vector3DUtils vecUtils;
 
-	system("PAUSE");
-
 	return 1;
 }
