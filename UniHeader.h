@@ -8,4 +8,4 @@
 
 using namespace std;
 
-#include "VectorUtilities.h"
+#include "VectorUtils.h"
