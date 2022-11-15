@@ -3,5 +3,5 @@
 void main()
 {
 	//Instantiate VectorUtils class
-	Vector3DUtils vecUtils;
+	VectorUtils vecUtils;
 }
