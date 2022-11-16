@@ -207,12 +207,12 @@ public:
 
 	float angularDifference2D(float p1x, float p1y, float p2x, float p2y);
 
-	Vector3D cartesanToSpherical(float x, float y, float z);//Cartesan to spherical (Orbit function)
+	Vector3D cartesanToSpherical(float x, float y, float z);//Cartesan coordinates to spherical
 
-	Vector3D sphericalToCartesan(float theta, float phi, float radius);//Spherical to cartesan
+	Vector3D sphericalToCartesan(float theta, float phi, float radius);//Spherical coordinates to cartesan
 
-	//Get a vector perpendicular to two 2D vectors
-	Vector2D orthogonalVector2D_CW(Vector2D a, Vector2D b);
+	Vector2D orthogonalVector2D_CW(Vector2D a, Vector2D b);//Get a vector perpendicular to two 2D vectors
+	
 	Vector2D orthogonalVector2D_CCW(Vector2D a, Vector2D b);
 
 private:
