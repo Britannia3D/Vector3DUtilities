@@ -50,7 +50,7 @@ bool VectorUtils::pointOnLine_2(Vector3D a, Vector3D b, Vector3D point)
 //3D point to spherical coordinates
 Vector3D VectorUtils::cartesanToSpherical(float x, float y, float z)
 {
-	float radius = vecUtils.length(Vector3D(x, y, z));
+	float radius = length(Vector3D(x, y, z));
 	float theta = atan2(sqrt(x * x + y * y), z);
 	float phi = atan2(y, x);
 
@@ -340,7 +340,7 @@ bool VectorUtils::insideTriangle2D(Vector3D pt, Vector3D v1, Vector3D v2, Vector
 	return !(has_neg && has_pos);
 }
 
-//Möller–Trumbore intersection algorithm. Fastest.
+//MÃ¶llerâ€“Trumbore intersection algorithm. Fastest.
 bool VectorUtils::rayTriangleIntersect(Vector3D rayOrigin, Vector3D rayVector, Vector3D* v1, Vector3D* v2, Vector3D* v3, Vector3D& outIntersectionPoint)
 {
 	const float EPSILON = 0.0000001;
