@@ -135,10 +135,10 @@ float VectorUtils::angularDifference2D(float p1x, float p1y, float p2x, float p2
 //The intersect point lies within the two line points
 bool VectorUtils::pointOnLine_3(Vector3D lineStart, Vector3D lineEnd, Vector3D point)
 {
-	float lineDist = utils.dist(lineStart.x, lineStart.y, lineStart.z, lineEnd.x, lineEnd.y, lineEnd.z);
+	float lineDist = dist(lineStart.x, lineStart.y, lineStart.z, lineEnd.x, lineEnd.y, lineEnd.z);
 
-	float d1 = utils.dist(point.x, point.y, point.z, lineEnd.x, lineEnd.y, lineEnd.z);
-	float d2 = utils.dist(point.x, point.y, point.z, lineStart.x, lineStart.y, lineStart.z);
+	float d1 = dist(point.x, point.y, point.z, lineEnd.x, lineEnd.y, lineEnd.z);
+	float d2 = dist(point.x, point.y, point.z, lineStart.x, lineStart.y, lineStart.z);
 
 	//Get furthest
 	if (d1 > d2)
@@ -176,11 +176,11 @@ Vector3D VectorUtils::closestPointAlongLine(Vector3D lineFrom, Vector3D lineTo, 
 {
 	//Convert to unit vector
 	Vector3D c0 = (lineFrom - lineTo);
-	float l = vecUtils.length(c0);
+	float l = length(c0);
 	Vector3D u = Vector3D(c0.x / l, c0.y / l, c0.z / l);
 
 	Vector3D v = c - lineFrom;
-	float w = vecUtils.dot(u, v);
+	float w = dot(u, v);
 	Vector3D r((u.x * w), (u.y * w), (u.z * w));
 	return lineFrom + r;
 };
@@ -235,8 +235,8 @@ Vector3D VectorUtils::closestPlanePoint(Vector3D pointPosition, Vector3D planePo
 	float sb, sn, sd;
 
 	Vector3D d1 = pointPosition - planePosition;
-	sn = -vecUtils.dot(planeNormal, d1);
-	sd = vecUtils.dot(planeNormal, planeNormal);
+	sn = -dot(planeNormal, d1);
+	sd = dot(planeNormal, planeNormal);
 
 	sb = sn / sd;
 
@@ -248,7 +248,7 @@ Vector3D VectorUtils::closestPlanePoint(Vector3D pointPosition, Vector3D planePo
 //Move point a towards b, return c as output
 Vector3D VectorUtils::displaceVectorTowards(Vector3D a, Vector3D b, float amount)
 {
-	if (utils.dist(a.x, a.y, a.z, b.x, b.y, b.z) <= 0.0)
+	if (dist(a.x, a.y, a.z, b.x, b.y, b.z) <= 0.0)
 	{
 		//Vector3D op4(256, 256, 256);
 		return(a);
