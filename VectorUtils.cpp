@@ -256,7 +256,6 @@ Vector3D VectorUtils::displaceVectorTowards(Vector3D a, Vector3D b, float amount
 
 	Vector3D op0(0, 0, 0);
 
-	//[End-Start]
 	op0.x = b.x - a.x;
 	op0.y = b.y - a.y;
 	op0.z = b.z - a.z;
@@ -264,7 +263,7 @@ Vector3D VectorUtils::displaceVectorTowards(Vector3D a, Vector3D b, float amount
 	Vector3D op1(op0.x, op0.y, op0.z);
 	Vector3D vi(op1.x, op1.y, op1.z);
 	float vLen0 = length(vi);
-	float vLen1 = 1 / vLen0;//Amount to scale to increase by 1
+	float vLen1 = 1 / vLen0;
 
 	Vector3D op3(op1.x, op1.y, op1.z);
 	op3 *= vLen1 * amount;
@@ -324,7 +323,7 @@ float VectorUtils::sign(Vector3D p1, Vector3D p2, Vector3D p3)
 	return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
 }
 
-//2D point within triangle
+//3D point within triangle
 bool VectorUtils::insideTriangle2D(Vector3D pt, Vector3D v1, Vector3D v2, Vector3D v3)
 {
 	float d1, d2, d3;
